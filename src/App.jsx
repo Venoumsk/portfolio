@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // Direct asset imports — bundled by Vite with 100% path safety on GitHub Pages
+import yoloImg from './assets/yolo11_perception.jpg';
 import farmtechImg from './assets/farmtech_guru.jpg';
 import paperforgeImg from './assets/paperforge.jpg';
 import dataflowImg from './assets/dataflow.jpg';
@@ -10,7 +11,7 @@ import dinvoiceImg from './assets/dinvoice.jpg';
 export default function App() {
   const [theme, setTheme] = useState('light');
   const [activeFilter, setActiveFilter] = useState('all');
-  const [activeWorkbenchTab, setActiveWorkbenchTab] = useState('farmtech');
+  const [activeWorkbenchTab, setActiveWorkbenchTab] = useState('yolo');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -58,28 +59,34 @@ export default function App() {
     (calcVideo ? 5 : 0);
 
   const workbenchDemos = {
-    farmtech: {
-      title: 'FarmTech Guru — Mobile Agro-Engine & Cloud Sync',
-      desc: 'Native Android application logic computing crop nutrient requirements, weather diagnostics, and offline-first Firestore synchronization.',
+    yolo: {
+      title: 'YOLO11 Autonomous Driving Multi-Model Inference',
+      desc: 'Offline deep learning perception suite deploying 3 neural architectures: road lanes, construction hazard scoring, and traffic signals.',
       metrics: [
-        { label: 'Platform', value: 'Android / Java' },
-        { label: 'Database', value: 'Firebase Firestore' },
-        { label: 'Offline Mode', value: '100% Cache Sync' },
-        { label: 'Weather Feed', value: 'OpenWeatherMap API' }
+        { label: 'Model Suite', value: '3 Specialized Nets' },
+        { label: 'Training Set', value: '1,000+ Labeled Frames' },
+        { label: 'Telemetry', value: 'Real-Time Hazard Scoring' },
+        { label: 'Inference Engine', value: 'PyTorch / YOLO11' }
       ],
-      code: `// Fertilizer Calculation Engine & Crop Advisory
-public class FertilizerEngine {
-    public static FertilizerPlan calculate(Crop crop, double landAcres) {
-        double nitrogenPerAcre = crop.getRecommendedNitrogen();
-        double phosphorusPerAcre = crop.getRecommendedPhosphorus();
-        
-        // Exact chemical conversion to commercial fertilizer weights
-        double totalUreaKg = (nitrogenPerAcre * landAcres) / 0.46;
-        double totalDapKg = (phosphorusPerAcre * landAcres) / 0.46;
-        
-        return new FertilizerPlan(totalUreaKg, totalDapKg, crop.getStage());
-    }
-}`
+      code: `from ultralytics import YOLO
+import cv2
+
+# Initialize 3-Model Autonomous Driving Suite
+lane_model = YOLO("model1_road_lanes.pt")
+hazard_model = YOLO("model2_road_construction.pt")
+signal_model = YOLO("model3_traffic_signals.pt")
+
+def analyze_road_scene(frame):
+    # Simultaneous real-time frame inference
+    lanes = lane_model(frame, conf=0.45)
+    hazards = hazard_model(frame, conf=0.50)
+    signals = signal_model(frame, conf=0.55)
+    
+    return {
+        "lane_geometry": lanes[0].boxes,
+        "hazard_score": calculate_hazard_risk(hazards[0].boxes),
+        "traffic_signals": signals[0].boxes
+    }`
     },
     csv: {
       title: 'Python Pandas ETL & 2.8M Record Dump Processing',
@@ -106,6 +113,29 @@ def process_massive_dump(file_path: str, chunk_size: int = 100000):
         
     df_clean = pd.concat(processed_chunks, ignore_index=True)
     return df_clean`
+    },
+    farmtech: {
+      title: 'FarmTech Guru — Mobile Agro-Engine & Cloud Sync',
+      desc: 'Native Android application logic computing crop nutrient requirements, weather diagnostics, and offline-first Firestore synchronization.',
+      metrics: [
+        { label: 'Platform', value: 'Android / Java' },
+        { label: 'Database', value: 'Firebase Firestore' },
+        { label: 'Offline Mode', value: '100% Cache Sync' },
+        { label: 'Weather Feed', value: 'OpenWeatherMap API' }
+      ],
+      code: `// Fertilizer Calculation Engine & Crop Advisory
+public class FertilizerEngine {
+    public static FertilizerPlan calculate(Crop crop, double landAcres) {
+        double nitrogenPerAcre = crop.getRecommendedNitrogen();
+        double phosphorusPerAcre = crop.getRecommendedPhosphorus();
+        
+        // Exact chemical conversion to commercial fertilizer weights
+        double totalUreaKg = (nitrogenPerAcre * landAcres) / 0.46;
+        double totalDapKg = (phosphorusPerAcre * landAcres) / 0.46;
+        
+        return new FertilizerPlan(totalUreaKg, totalDapKg, crop.getStage());
+    }
+}`
     },
     pdf: {
       title: 'Client-Side PDF Vector Manipulation',
@@ -160,6 +190,51 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
 
   const projects = [
     {
+      id: 'yolo11',
+      title: 'YOLO11 Autonomous Driving 3-Model Perception Suite',
+      category: ['ai', 'python'],
+      tags: ['YOLO11', 'PyTorch', 'OpenCV', 'Computer Vision', 'Python'],
+      image: yoloImg,
+      badge: 'AI & Computer Vision',
+      desc: 'Offline deep learning perception suite deploying 3 neural models: (1) Road lanes & paint markings, (2) Construction zones & safety hazard scoring, and (3) Traffic signals state & spatial locator.',
+      highlights: [
+        'Custom YOLO11 architectures trained on 1,000+ labeled road frames',
+        'Geospatial coordinate mapping with interactive inspection viewer',
+        'Automated batch runners & real-time frame inference'
+      ],
+      github: 'https://github.com/venoumsk'
+    },
+    {
+      id: 'dataflow',
+      title: 'DataFlow Enterprise Automation Pipeline',
+      category: ['python'],
+      tags: ['Python', 'Pandas', 'OpenPyXL', 'Excel Automation', 'ETL'],
+      image: dataflowImg,
+      badge: 'Python & Big Data ETL',
+      desc: 'High-speed Python pipeline engineered for automated dump file ingestion. Repairs irregular dates, standardizes broken schemas, isolates anomalies, and processes 2.8+ Million records with memory-efficient chunking and zero data loss.',
+      highlights: [
+        'High-throughput engine benchmarked on 2.8+ Million records',
+        'Surpasses Microsoft Excel 1.04M row ceiling with chunked streams',
+        'Auto-generates multi-tab executive KPI dashboard & native charts'
+      ],
+      github: 'https://github.com/venoumsk/data-automation-demo'
+    },
+    {
+      id: 'paperforge',
+      title: 'PaperForge — Private In-Browser Document Studio',
+      category: ['web'],
+      tags: ['React', 'Vite', 'Canvas API', 'pdf-lib', 'Word DOCX'],
+      image: paperforgeImg,
+      badge: 'React & Vite',
+      desc: 'Full-featured client-side PDF & Word document editor. Annotate with text, freehand canvas drawing, insert geometric shapes/images, and reorder pages with zero server latency or data leakage.',
+      highlights: [
+        'Zero server uploads — 100% confidential & private',
+        'Real-time vector canvas rendering & layer ordering',
+        'Exports standard-compliant PDFs in < 150ms'
+      ],
+      github: 'https://github.com/venoumsk/paperforge'
+    },
+    {
       id: 'farmtech',
       title: 'FarmTech Guru — Smart Agriculture Mobile App',
       category: ['apps'],
@@ -175,39 +250,9 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
       github: 'https://github.com/venoumsk/FarmTech_Guru'
     },
     {
-      id: 'paperforge',
-      title: 'PaperForge — Private In-Browser Document Studio',
-      category: ['web', 'docs'],
-      tags: ['React', 'Vite', 'Canvas API', 'pdf-lib', 'Word DOCX'],
-      image: paperforgeImg,
-      badge: 'React & Vite',
-      desc: 'Full-featured client-side PDF & Word document editor. Annotate with text, freehand canvas drawing, insert geometric shapes/images, and reorder pages with zero server latency or data leakage.',
-      highlights: [
-        'Zero server uploads — 100% confidential & private',
-        'Real-time vector canvas rendering & layer ordering',
-        'Exports standard-compliant PDFs in < 150ms'
-      ],
-      github: 'https://github.com/venoumsk/paperforge'
-    },
-    {
-      id: 'dataflow',
-      title: 'DataFlow Enterprise Automation Pipeline',
-      category: ['python', 'docs'],
-      tags: ['Python', 'Pandas', 'OpenPyXL', 'Excel Automation'],
-      image: dataflowImg,
-      badge: 'Python & Pandas',
-      desc: 'High-speed Python pipeline engineered for automated recurring invoice ingestion. Repairs irregular dates, standardizes broken schemas, isolates anomalies, and compiles executive Excel workbooks with KPI summaries and native charts in seconds.',
-      highlights: [
-        'High-throughput engine benchmarked on 2.8+ Million records',
-        'Auto-generates executive summary KPI dashboard',
-        '1-click runner (.bat) ready for non-technical staff'
-      ],
-      github: 'https://github.com/venoumsk/data-automation-demo'
-    },
-    {
       id: 'dinvoice',
       title: 'D-Invoice — GST-Ready Web Invoicing App',
-      category: ['web', 'docs'],
+      category: ['web'],
       tags: ['JavaScript', 'HTML5', 'CSS3', 'PDF Engine'],
       image: dinvoiceImg,
       badge: 'Web App & PDF',
@@ -218,6 +263,21 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
         'Instant client-side PDF download & thermal print mode'
       ],
       github: 'https://github.com/venoumsk/D-invoice'
+    },
+    {
+      id: 'outreach',
+      title: 'Client Outreach Mailer & Delivery Cleaner',
+      category: ['python', 'apps'],
+      tags: ['Python', 'CustomTkinter', 'SMTP', 'ETL Automation'],
+      image: dataflowImg,
+      badge: 'Desktop Tool & ETL',
+      desc: 'Autonomous B2B outreach software and rapid-turnaround client data cleaner. Features dual-port Gmail SSL/TLS dispatch, lead management with state persistence, and an automated data cleaning runner for incoming client spreadsheets.',
+      highlights: [
+        'CustomTkinter desktop GUI with real-time audit console',
+        'Dual-port SMTP engine with safe delay throttling',
+        'Automated cleaner compiling executive multi-tab KPI workbooks'
+      ],
+      github: 'https://github.com/venoumsk'
     }
   ];
 
@@ -240,6 +300,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
           <ul className="nav-links">
             <li><a href="#workbench" className="nav-link">Workbench</a></li>
             <li><a href="#work" className="nav-link">Projects</a></li>
+            <li><a href="#credentials" className="nav-link">Credentials</a></li>
             <li><a href="#pricing" className="nav-link">Pricing</a></li>
             <li><a href="https://github.com/venoumsk" target="_blank" rel="noopener noreferrer" className="nav-link">GitHub ↗</a></li>
           </ul>
@@ -270,18 +331,18 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
         <div className="container">
           <div className="hero-badge-wrap animate-reveal">
             <span className="badge">
-              Software Engineer · Application Development &amp; Python Automation
+              Software Developer · Computer Vision, Big Data &amp; Full-Stack Systems
             </span>
           </div>
 
           <h1 className="hero-title animate-reveal-delay-1">
-            Engineering robust applications, modern web tools &amp;{' '}
+            Engineering high-speed AI vision, robust apps &amp;{' '}
             <span className="hero-title-gradient">automated pipelines.</span>
           </h1>
 
           <p className="hero-subtitle animate-reveal-delay-2">
-            Specializing in full-stack mobile applications (Android/Java), 
-            private client-side React tools (PaperForge), and high-throughput Python data workflows.
+            Specializing in offline Computer Vision (YOLO11), massive Python ETL pipelines (2.8M+ records), 
+            native Android mobile applications, and private client-side React software.
           </p>
 
           <div className="hero-ctas animate-reveal-delay-3">
@@ -298,16 +359,16 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
 
           <div className="hero-stats-grid animate-reveal-delay-4">
             <div className="stat-card">
-              <div className="stat-value">App Development</div>
-              <div className="stat-label">Mobile &amp; Full-Stack Systems</div>
+              <div className="stat-value">YOLO11 Suite</div>
+              <div className="stat-label">3 Autonomous Driving Models</div>
             </div>
             <div className="stat-card">
               <div className="stat-value">2.8M+ Records</div>
               <div className="stat-label">Python High-Speed Data Pipelines</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">React &amp; Vite</div>
-              <div className="stat-label">Client-Side Web Tools</div>
+              <div className="stat-value">Mobile &amp; Apps</div>
+              <div className="stat-label">Android Studio &amp; Firebase</div>
             </div>
             <div className="stat-card">
               <div className="stat-value">100% Private</div>
@@ -331,16 +392,22 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
           <div className="workbench-card surface-card">
             <div className="workbench-tabs">
               <button 
-                className={`workbench-tab-btn ${activeWorkbenchTab === 'farmtech' ? 'active' : ''}`}
-                onClick={() => setActiveWorkbenchTab('farmtech')}
+                className={`workbench-tab-btn ${activeWorkbenchTab === 'yolo' ? 'active' : ''}`}
+                onClick={() => setActiveWorkbenchTab('yolo')}
               >
-                Mobile App Engine (FarmTech Guru)
+                AI Vision (YOLO11 Suite)
               </button>
               <button 
                 className={`workbench-tab-btn ${activeWorkbenchTab === 'csv' ? 'active' : ''}`}
                 onClick={() => setActiveWorkbenchTab('csv')}
               >
-                Python ETL &amp; Data Repair
+                Python ETL &amp; 2.8M Data
+              </button>
+              <button 
+                className={`workbench-tab-btn ${activeWorkbenchTab === 'farmtech' ? 'active' : ''}`}
+                onClick={() => setActiveWorkbenchTab('farmtech')}
+              >
+                Mobile App Engine (FarmTech Guru)
               </button>
               <button 
                 className={`workbench-tab-btn ${activeWorkbenchTab === 'pdf' ? 'active' : ''}`}
@@ -427,25 +494,31 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
               className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
               onClick={() => setActiveFilter('all')}
             >
-              All Projects (4)
+              All Projects ({projects.length})
+            </button>
+            <button 
+              className={`filter-btn ${activeFilter === 'ai' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('ai')}
+            >
+              AI &amp; Computer Vision
+            </button>
+            <button 
+              className={`filter-btn ${activeFilter === 'python' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('python')}
+            >
+              Python &amp; Big Data ETL
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'apps' ? 'active' : ''}`}
               onClick={() => setActiveFilter('apps')}
             >
-              Mobile &amp; Application Dev
+              Mobile &amp; Desktop Apps
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'web' ? 'active' : ''}`}
               onClick={() => setActiveFilter('web')}
             >
               Web Applications
-            </button>
-            <button 
-              className={`filter-btn ${activeFilter === 'python' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('python')}
-            >
-              Python &amp; Automation
             </button>
           </div>
 
@@ -501,6 +574,56 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Verified Credentials & Education */}
+      <section id="credentials" className="section">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-label">Academic &amp; Professional Background</span>
+            <h2 className="section-title">Verified Education &amp; Credentials</h2>
+            <p className="section-subtitle">
+              Formal academic foundation in Information Technology combined with production software development experience.
+            </p>
+          </div>
+
+          <div className="credentials-grid">
+            <div className="credential-card surface-card">
+              <span className="credential-badge">Undergraduate Degree</span>
+              <h3 className="credential-title">Bachelor of Science in Information Technology (B.Sc. IT)</h3>
+              <div className="credential-inst">Changu Kana Thakur ACS College &bull; University of Mumbai</div>
+              <div className="credential-meta">Graduation: 2025 &nbsp;|&nbsp; <strong>CGPA: 8.57 &bull; SGPA: 9.70</strong></div>
+              <p className="credential-desc">
+                Extensive technical coursework across Advanced Java, Data Structures, Database Management Systems, Cloud Architecture, and Software Engineering methodologies.
+              </p>
+            </div>
+
+            <div className="credential-card surface-card">
+              <span className="credential-badge">Higher Secondary</span>
+              <h3 className="credential-title">Higher Secondary Certificate (XII - Science PCMB)</h3>
+              <div className="credential-inst">Maharashtra State Board of Secondary &amp; Higher Secondary Education</div>
+              <div className="credential-meta">Completion: 2022</div>
+              <p className="credential-desc">
+                Intensive analytical coursework in Physics, Chemistry, Mathematics, and Biology with emphasis on algorithmic thinking and mathematical problem-solving.
+              </p>
+            </div>
+
+            <div className="credential-card surface-card">
+              <span className="credential-badge">Certifications</span>
+              <h3 className="credential-title">Technical Certifications &amp; Training</h3>
+              <div className="credential-inst">Skill Development &amp; Industry Standards</div>
+              <p className="credential-desc" style={{ marginBottom: '0.85rem' }}>
+                Completed specialized training in high-performance application development and cloud systems:
+              </p>
+              <div className="credential-tags">
+                <span className="project-tag">Advance Technology: Kotlin Programming</span>
+                <span className="project-tag">Advance Core Java</span>
+                <span className="project-tag">Cloud Computing</span>
+                <span className="project-tag">Basics of Information Technology</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -710,6 +833,24 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.95rem', fontWeight: 600, color: 'var(--accent-indigo)' }}>
                 disaleaniruddha@gmail.com
               </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.85rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-hairline)' }}>
+                <span style={{ fontSize: '0.76rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                  PHONE / WHATSAPP
+                </span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  +91 9920881239
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.45rem' }}>
+                <span style={{ fontSize: '0.76rem', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                  LOCATION
+                </span>
+                <span style={{ fontSize: '0.86rem', color: 'var(--text-secondary)' }}>
+                  Maharashtra, India
+                </span>
+              </div>
             </div>
 
             <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -732,7 +873,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
             </div>
 
             <p style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              🔒 100% Confidential. All client communications are strictly private.
+              100% Confidential. All client communications and datasets are strictly private.
             </p>
           </div>
         </div>

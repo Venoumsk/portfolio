@@ -917,6 +917,76 @@
   gap: 1.25rem;
 }
 
+/* Verified Credentials & Education */
+.credentials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.credential-card {
+  padding: 1.85rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
+}
+
+.credential-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.credential-badge {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: var(--accent-indigo-light);
+  color: var(--accent-indigo);
+  margin-bottom: 0.9rem;
+}
+
+.credential-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+.credential-inst {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent-indigo);
+  margin-bottom: 0.45rem;
+}
+
+.credential-meta {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  margin-bottom: 0.85rem;
+}
+
+.credential-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.credential-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
 /* Fluid Motion (Emil Kowalski Motion Principles) */
 @keyframes revealUp {
   0% {
