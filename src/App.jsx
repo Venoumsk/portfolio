@@ -7,6 +7,7 @@ import farmtechImg from './assets/farmtech_guru.jpg';
 import paperforgeImg from './assets/paperforge.jpg';
 import dataflowImg from './assets/dataflow.jpg';
 import dinvoiceImg from './assets/dinvoice.jpg';
+import celerpayImg from './assets/celerpay.jpg';
 
 export default function App() {
   const [theme, setTheme] = useState('light');
@@ -16,11 +17,6 @@ export default function App() {
   const [selectedService, setSelectedService] = useState(null);
   const [copied, setCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
-
-  // Interactive Project Cost Estimator state
-  const [calcScope, setCalcScope] = useState('feature');
-  const [calcSpeed, setCalcSpeed] = useState('standard');
-  const [calcVideo, setCalcVideo] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -46,17 +42,6 @@ export default function App() {
     setCodeCopied(true);
     setTimeout(() => setCodeCopied(false), 2000);
   };
-
-  // Pricing calculations - super accessible freelance rates
-  const scopePrices = {
-    script: { name: 'Quick Automation Script', base: 10, time: '12-24h' },
-    feature: { name: 'Feature Module / Pipeline', base: 29, time: '24-48h' },
-    app: { name: 'Complete Application / Tool', base: 69, time: '2-3 Days' }
-  };
-
-  const estimatedTotal = scopePrices[calcScope].base + 
-    (calcSpeed === 'rush' ? 10 : 0) + 
-    (calcVideo ? 5 : 0);
 
   const workbenchDemos = {
     yolo: {
@@ -265,19 +250,34 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
       github: 'https://github.com/venoumsk/D-invoice'
     },
     {
-      id: 'outreach',
-      title: 'Client Outreach Mailer & Delivery Cleaner',
+      id: 'cadencex',
+      title: 'CadenceX — Enterprise Cadence Reporting & Spatial Data Engine',
       category: ['python', 'apps'],
-      tags: ['Python', 'CustomTkinter', 'SMTP', 'ETL Automation'],
+      tags: ['Python', 'Polars', 'CustomTkinter', 'Spatial Data QA', 'XlsxWriter'],
       image: dataflowImg,
-      badge: 'Desktop Tool & ETL',
-      desc: 'Autonomous B2B outreach software and rapid-turnaround client data cleaner. Features dual-port Gmail SSL/TLS dispatch, lead management with state persistence, and an automated data cleaning runner for incoming client spreadsheets.',
+      badge: 'Desktop System & Spatial Data',
+      desc: 'High-performance reporting and data processing suite engineered for spatial cadence operations across 8 enterprise database partitions. Ingests, normalizes, and reconciles 1,053,805 records in ~74 seconds with peak memory under 2.8 GB.',
       highlights: [
-        'CustomTkinter desktop GUI with real-time audit console',
-        'Dual-port SMTP engine with safe delay throttling',
-        'Automated cleaner compiling executive multi-tab KPI workbooks'
+        'Polars (Rust/C Arrow engine) vectorized SIMD throughput',
+        'Mathematical row parity: Extracted = Eligible + Excluded + Held',
+        'Zero-freeze asynchronous CustomTkinter desktop interface'
       ],
       github: 'https://github.com/venoumsk'
+    },
+    {
+      id: 'celerpay',
+      title: 'CelerPay — UPI Mobile Payment Application',
+      category: ['apps'],
+      tags: ['Flutter', 'Dart', 'Provider', 'Clean Architecture', 'UPI UI'],
+      image: celerpayImg,
+      badge: 'Flutter Mobile App',
+      desc: 'PhonePe-inspired UPI payment application built with Flutter and Provider state management. Features modular clean architecture, balance updates, transaction history, QR/profile workflows, and adaptive themes.',
+      highlights: [
+        'Modular clean architecture with Provider state management',
+        'Full payment transaction, confirmation, and receipt flows',
+        'Adaptive light and dark material themes'
+      ],
+      github: 'https://github.com/venoumsk/celerpay'
     }
   ];
 
@@ -301,7 +301,6 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
             <li><a href="#workbench" className="nav-link">Workbench</a></li>
             <li><a href="#work" className="nav-link">Projects</a></li>
             <li><a href="#credentials" className="nav-link">Credentials</a></li>
-            <li><a href="#pricing" className="nav-link">Pricing</a></li>
             <li><a href="https://github.com/venoumsk" target="_blank" rel="noopener noreferrer" className="nav-link">GitHub ↗</a></li>
           </ul>
 
@@ -316,7 +315,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
             </button>
             <div className="badge badge-status">
               <span className="badge-status-dot"></span>
-              <span>Available for Hire</span>
+              <span>HERE Technologies</span>
             </div>
             <button onClick={() => handleOpenModal()} className="btn btn-primary">
               Contact
@@ -331,7 +330,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
         <div className="container">
           <div className="hero-badge-wrap animate-reveal">
             <span className="badge">
-              Software Developer · Computer Vision, Big Data &amp; Full-Stack Systems
+              Spatial Data Analyst Apprentice @ HERE Technologies · Software &amp; Data Systems
             </span>
           </div>
 
@@ -341,8 +340,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
           </h1>
 
           <p className="hero-subtitle animate-reveal-delay-2">
-            Specializing in offline Computer Vision (YOLO11), massive Python ETL pipelines (2.8M+ records), 
-            native Android mobile applications, and private client-side React software.
+            Spatial Data Analyst Apprentice at HERE Technologies. Engineering high-throughput data pipelines (1M+ records on Polars), offline Computer Vision (YOLO11), and client-side web architectures.
           </p>
 
           <div className="hero-ctas animate-reveal-delay-3">
@@ -359,6 +357,10 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
 
           <div className="hero-stats-grid animate-reveal-delay-4">
             <div className="stat-card">
+              <div className="stat-value">CadenceX</div>
+              <div className="stat-label">1.05M Records in ~74s</div>
+            </div>
+            <div className="stat-card">
               <div className="stat-value">YOLO11 Suite</div>
               <div className="stat-label">3 Autonomous Driving Models</div>
             </div>
@@ -367,12 +369,8 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
               <div className="stat-label">Python High-Speed Data Pipelines</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">Mobile &amp; Apps</div>
-              <div className="stat-label">Android Studio &amp; Firebase</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-value">100% Private</div>
-              <div className="stat-label">Zero-Upload Client Privacy</div>
+              <div className="stat-value">HERE Tech</div>
+              <div className="stat-label">Spatial Data &amp; Map QA</div>
             </div>
           </div>
         </div>
@@ -628,182 +626,6 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
         </div>
       </section>
 
-      {/* Services & Affordable Pricing Section */}
-      <section id="pricing" className="section">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label">Accessible Freelance Rates</span>
-            <h2 className="section-title">Transparent &amp; Budget-Friendly Pricing</h2>
-            <p className="section-subtitle">
-              High-craft software without agency overhead. Predictable fixed-scope milestone terms with $0 hidden surprises.
-            </p>
-          </div>
-
-          {/* Interactive Cost Estimator Widget */}
-          <div className="estimator-card surface-card">
-            <div className="estimator-header">
-              <div>
-                <span className="estimator-tag">Interactive Estimator</span>
-                <h3 className="estimator-title">Instant Project Calculator</h3>
-              </div>
-              <div className="estimator-total-wrap">
-                <span className="estimator-total-label">Estimated Fixed Cost:</span>
-                <span className="estimator-total-price">${estimatedTotal}</span>
-                <span className="estimator-total-eta">⚡ {scopePrices[calcScope].time}</span>
-              </div>
-            </div>
-
-            <div className="estimator-controls">
-              <div className="estimator-group">
-                <label className="estimator-label">1. Choose Deliverable Scope:</label>
-                <div className="pill-selector">
-                  <button 
-                    className={`pill-option ${calcScope === 'script' ? 'active' : ''}`}
-                    onClick={() => setCalcScope('script')}
-                  >
-                    Quick Script ($10)
-                  </button>
-                  <button 
-                    className={`pill-option ${calcScope === 'feature' ? 'active' : ''}`}
-                    onClick={() => setCalcScope('feature')}
-                  >
-                    Feature Module ($29)
-                  </button>
-                  <button 
-                    className={`pill-option ${calcScope === 'app' ? 'active' : ''}`}
-                    onClick={() => setCalcScope('app')}
-                  >
-                    Complete App / Tool ($69)
-                  </button>
-                </div>
-              </div>
-
-              <div className="estimator-group">
-                <label className="estimator-label">2. Delivery Speed &amp; Options:</label>
-                <div className="pill-selector">
-                  <button 
-                    className={`pill-option ${calcSpeed === 'standard' ? 'active' : ''}`}
-                    onClick={() => setCalcSpeed('standard')}
-                  >
-                    Standard Pace (+ $0)
-                  </button>
-                  <button 
-                    className={`pill-option ${calcSpeed === 'rush' ? 'active' : ''}`}
-                    onClick={() => setCalcSpeed('rush')}
-                  >
-                    Priority Rush (+ $10)
-                  </button>
-                  <button 
-                    className={`pill-option ${calcVideo ? 'active' : ''}`}
-                    onClick={() => setCalcVideo(!calcVideo)}
-                  >
-                    Video Walkthrough (+ $5)
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="estimator-cta-wrap">
-              <button 
-                onClick={() => handleOpenModal(`Estimated: ${scopePrices[calcScope].name} ($${estimatedTotal})`)}
-                className="btn btn-primary"
-                style={{ width: '100%', padding: '0.85rem' }}
-              >
-                Inquire With This Estimate (${estimatedTotal}) →
-              </button>
-            </div>
-          </div>
-
-          {/* Pricing Grid */}
-          <div className="pricing-grid">
-            <div className="pricing-card surface-card">
-              <div>
-                <h3 className="pricing-name">Quick Script &amp; Automation</h3>
-                <p className="pricing-desc">Single-file automation, CSV repair, or quick bug fix.</p>
-
-                <div className="pricing-price-wrap">
-                  <span className="price-currency">$</span>
-                  <span className="price-amount">10</span>
-                </div>
-                <div className="price-speed">⚡ 12-24 Hour Turnaround</div>
-
-                <ul className="pricing-features">
-                  <li>Deduplication &amp; date/ID normalization</li>
-                  <li>Python script + 1-click executable runner</li>
-                  <li>Edge-case validation &amp; console logs</li>
-                  <li>Clear documented execution instructions</li>
-                </ul>
-              </div>
-
-              <button 
-                onClick={() => handleOpenModal('Quick Script & Automation ($10)')}
-                className="btn btn-secondary" 
-                style={{ width: '100%' }}
-              >
-                Inquire at $10
-              </button>
-            </div>
-
-            <div className="pricing-card surface-card featured">
-              <span className="popular-tag">Most Popular</span>
-              <div>
-                <h3 className="pricing-name">Feature Module / Pipeline</h3>
-                <p className="pricing-desc">Mobile app screen, React component, or full Pandas ETL workflow.</p>
-
-                <div className="pricing-price-wrap">
-                  <span className="price-currency">$</span>
-                  <span className="price-amount">29</span>
-                </div>
-                <div className="price-speed">⚡ 24-48 Hour Delivery</div>
-
-                <ul className="pricing-features">
-                  <li>Native Android Studio or React Vite module</li>
-                  <li>Firebase Firestore offline sync or Excel charts</li>
-                  <li>Production-grade error handling &amp; tests</li>
-                  <li>Direct video walkthrough &amp; support warranty</li>
-                </ul>
-              </div>
-
-              <button 
-                onClick={() => handleOpenModal('Feature Module / Pipeline ($29)')}
-                className="btn btn-primary" 
-                style={{ width: '100%' }}
-              >
-                Inquire at $29
-              </button>
-            </div>
-
-            <div className="pricing-card surface-card">
-              <div>
-                <h3 className="pricing-name">Complete Custom Tool / App</h3>
-                <p className="pricing-desc">Standalone client-side web application or native Android module.</p>
-
-                <div className="pricing-price-wrap">
-                  <span className="price-currency">$</span>
-                  <span className="price-amount">69</span>
-                </div>
-                <div className="price-speed">⚡ 2-3 Days Delivery</div>
-
-                <ul className="pricing-features">
-                  <li>Responsive React or Android architecture</li>
-                  <li>Zero monthly hosting fees (static / client-side)</li>
-                  <li>Complete source code ownership &amp; clean git repo</li>
-                  <li>Free deployment setup &amp; maintenance handover</li>
-                </ul>
-              </div>
-
-              <button 
-                onClick={() => handleOpenModal('Complete Custom Application ($69)')}
-                className="btn btn-secondary" 
-                style={{ width: '100%' }}
-              >
-                Inquire at $69
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Modal */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
@@ -811,10 +633,10 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
             <button className="modal-close" onClick={() => setIsModalOpen(false)}>✕</button>
             
             <h3 style={{ fontSize: '1.45rem', fontWeight: 800, marginBottom: '0.4rem', color: 'var(--text-primary)' }}>
-              Start a Conversation
+              Get in Touch
             </h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.5 }}>
-              {selectedService ? `Discussing: ${selectedService}` : 'Share a brief overview of your application or workflow requirements.'}
+              Open to technical discussions, spatial data engineering, and software collaboration.
             </p>
 
             <div style={{ background: 'var(--bg-subtle)', padding: '1.1rem', borderRadius: '12px', border: '1px solid var(--border-hairline)', marginBottom: '1.5rem' }}>
@@ -848,14 +670,14 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
                   LOCATION
                 </span>
                 <span style={{ fontSize: '0.86rem', color: 'var(--text-secondary)' }}>
-                  Maharashtra, India
+                  Navi Mumbai, Maharashtra, India
                 </span>
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <a 
-                href={`mailto:disaleaniruddha@gmail.com?subject=Project Inquiry: ${selectedService || 'Application / Automation'}&body=Hi Aniruddha,%0D%0A%0D%0AI would like to discuss a project involving [brief description].%0D%0A%0D%0ABest regards`}
+                href="mailto:disaleaniruddha@gmail.com?subject=Connecting with Aniruddha Disale&body=Hi Aniruddha,%0D%0A%0D%0AI would like to connect regarding [brief message].%0D%0A%0D%0ABest regards"
                 className="btn btn-primary"
                 style={{ flex: 1 }}
               >
@@ -873,7 +695,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
             </div>
 
             <p style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              100% Confidential. All client communications and datasets are strictly private.
+              Feel free to connect directly via email or GitHub.
             </p>
           </div>
         </div>
