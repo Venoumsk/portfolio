@@ -330,7 +330,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
             </button>
             <div className="badge badge-status">
               <span className="badge-status-dot"></span>
-              <span>HERE Technologies</span>
+              <span>Full-Stack &amp; Spatial Data</span>
             </div>
             <button onClick={() => handleOpenModal()} className="btn btn-primary">
               Contact
@@ -345,7 +345,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
         <div className="container">
           <div className="hero-badge-wrap animate-reveal">
             <span className="badge">
-              Spatial Data Analyst Apprentice @ HERE Technologies · Software &amp; Data Systems
+              Software Developer · Computer Vision, Spatial Systems &amp; High-Throughput Data
             </span>
           </div>
 
@@ -355,7 +355,7 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
           </h1>
 
           <p className="hero-subtitle animate-reveal-delay-2">
-            Spatial Data Analyst Apprentice at HERE Technologies. Engineering high-throughput data pipelines (1M+ records on Polars), offline Computer Vision (YOLO11), and client-side web architectures.
+            Software Developer specializing in high-throughput data pipelines (1M+ records on Polars), offline Computer Vision (YOLO11), and client-side web architectures.
           </p>
 
           <div className="hero-ctas animate-reveal-delay-3">
@@ -384,8 +384,8 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
               <div className="stat-label">Python High-Speed Data Pipelines</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">HERE Tech</div>
-              <div className="stat-label">Spatial Data &amp; Map QA</div>
+              <div className="stat-value">Spatial Systems</div>
+              <div className="stat-label">Map QA &amp; Partitioning</div>
             </div>
           </div>
         </div>
