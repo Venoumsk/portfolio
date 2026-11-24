@@ -42,6 +42,19 @@
     <meta name="twitter:image" content="https://venoumsk.github.io/portfolio/yolo11_perception.jpg" />
     <meta name="twitter:image:alt" content="Aniruddha Disale (venoumsk) Developer Portfolio" />
 
+    <!-- Instant theme initialization to prevent flash -->
+    <script>
+      (function() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var queryTheme = params.get('theme');
+          var saved = queryTheme || localStorage.getItem('portfolio_theme');
+          var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -88,8 +101,8 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="./assets/index-DzS_OGLE.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Buu9ODYK.css">
+    <script type="module" crossorigin src="./assets/index-BP4W0QvV.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-_yQrTY0i.css">
   </head>
   <body>
     <div id="root"></div>
