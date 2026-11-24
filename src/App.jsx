@@ -1,36 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-// Direct authentic asset imports bundled by Vite
+// Direct authentic asset imports for the 5 curated projects
 import yoloImg from './assets/yolo11_perception.jpg';
-import cadencexImg from './assets/cadencex.jpg';
-import sortyImg from './assets/sorty.jpg';
 import dataflowImg from './assets/dataflow.jpg';
 import paperforgeImg from './assets/paperforge.jpg';
 import celerpayImg from './assets/celerpay.jpg';
 import farmtechImg from './assets/farmtech_guru.jpg';
-import dinvoiceImg from './assets/dinvoice.jpg';
 
 export default function App() {
   const [theme, setTheme] = useState('light');
   const [activeFilter, setActiveFilter] = useState('all');
-  const [activeWorkbenchTab, setActiveWorkbenchTab] = useState('cadencex');
+  const [activeWorkbenchTab, setActiveWorkbenchTab] = useState('yolo');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSubject, setModalSubject] = useState(null);
   const [emailCopied, setEmailCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
+  // Theme synchronization
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
+  // Scroll reveal and active section tracking via IntersectionObserver
+  useEffect(() => {
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          if (entry.target.id) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [activeFilter, activeWorkbenchTab]);
+
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const handleOpenModal = (subject = null) => {
     setModalSubject(subject);
     setIsModalOpen(true);
+    setMobileMenuOpen(false);
   };
 
   const handleCopyEmail = () => {
@@ -45,71 +70,8 @@ export default function App() {
     setTimeout(() => setCodeCopied(false), 2000);
   };
 
+  // Technical Workbench implementations corresponding to the curated projects
   const workbenchDemos = {
-    cadencex: {
-      title: 'CadenceX — Spatial Ingestion & Parity Reconciliation Engine',
-      desc: 'High-throughput Python pipeline powered by Polars (Rust/C Arrow SIMD) that ingests, normalizes, and reconciles 1.05M spatial records across 8 database partitions in ~74 seconds.',
-      metrics: [
-        { label: 'Throughput', value: '14,195 rows / sec' },
-        { label: 'Tested Dataset', value: '1,053,805 records' },
-        { label: 'Execution Time', value: '74.24 seconds' },
-        { label: 'Parity Drift', value: 'Exact Zero (Lossless)' }
-      ],
-      code: `import polars as pl
-
-def reconcile_spatial_cadence(file_path: str) -> dict:
-    """
-    Vectorized spatial cadence processing using Polars Arrow engine.
-    Mathematical parity: Extracted = Eligible + Excluded + Held.
-    """
-    df = pl.read_csv(file_path, low_memory=False)
-    
-    # Vectorized categorization rules
-    eligible = df.filter(pl.col("status").eq("ACTIVE") & pl.col("qa_score").gt(0.85))
-    excluded = df.filter(pl.col("status").ne("ACTIVE") | pl.col("qa_score").le(0.85))
-    held = df.filter(pl.col("review_flag").eq(True))
-    
-    extracted_count = len(df)
-    balanced = extracted_count == (len(eligible) + len(excluded) + len(held))
-    
-    return {
-        "extracted": extracted_count,
-        "eligible": len(eligible),
-        "excluded": len(excluded),
-        "held": len(held),
-        "parity_verified": balanced
-    }`
-    },
-    sorty: {
-      title: 'Sorty — GPU-Accelerated Spatial Partitioning Suite',
-      desc: 'Hardware-accelerated partitioning engine leveraging NVIDIA CUDA / CuPy and Polars for dynamic L15 quadkey derivation and coordinate sorting without float precision loss.',
-      metrics: [
-        { label: 'GPU Engine', value: 'CuPy CUDA Kernels' },
-        { label: 'Vector Sort', value: '82,400 rows / sec' },
-        { label: 'Coordinate Precision', value: '7-Decimal (FP64)' },
-        { label: 'Partition Output', value: 'Dynamic L15 Quadkeys' }
-      ],
-      code: `import cupy as cp
-import numpy as np
-
-def compute_l15_quadkeys_gpu(latitudes: np.ndarray, longitudes: np.ndarray):
-    """
-    Computes Level-15 Quadkeys on NVIDIA RTX 3050 GPU using CuPy.
-    Preserves 7-decimal floating point precision without coordinate truncation.
-    """
-    d_lat = cp.asarray(latitudes, dtype=cp.float64)
-    d_lon = cp.asarray(longitudes, dtype=cp.float64)
-    
-    # Normalized coordinate space mapping [0, 1]
-    norm_x = (d_lon + 180.0) / 360.0
-    sin_lat = cp.sin(d_lat * (cp.pi / 180.0))
-    norm_y = 0.5 - cp.log((1.0 + sin_lat) / (1.0 - sin_lat)) / (4.0 * cp.pi)
-    
-    tile_x = cp.floor(norm_x * (1 << 15)).astype(cp.int32)
-    tile_y = cp.floor(norm_y * (1 << 15)).astype(cp.int32)
-    
-    return cp.asnumpy(tile_x), cp.asnumpy(tile_y)`
-    },
     yolo: {
       title: 'YOLO11 Autonomous Driving 3-Model Perception Suite',
       desc: 'Offline deep learning perception suite deploying 3 specialized neural architectures simultaneously: road paint markings, construction hazard scoring, and traffic signal locators.',
@@ -192,6 +154,46 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
   return await pdfDoc.save();
 }`
     },
+    celerpay: {
+      title: 'CelerPay — UPI Transaction State Machine & Clean Architecture',
+      desc: 'Deterministic payment workflow using Flutter Provider state management. Manages transaction validation, PIN authorization, real-time balance mutation, and receipt generation.',
+      metrics: [
+        { label: 'Architecture', value: 'Modular Clean Pattern' },
+        { label: 'State Engine', value: 'Flutter Provider Notifier' },
+        { label: 'PIN Verification', value: 'Multi-Stage Auth Flow' },
+        { label: 'Theme Engine', value: 'Adaptive Material Design' }
+      ],
+      code: `// UPI Transaction State Machine (Flutter / Dart)
+class PaymentNotifier extends ChangeNotifier {
+  PaymentStatus _status = PaymentStatus.initial;
+  PaymentStatus get status => _status;
+
+  Future<TransactionReceipt> executeUpiTransfer({
+    required String upiId,
+    required double amount,
+    required String securityPin,
+  }) async {
+    _status = PaymentStatus.authorizing;
+    notifyListeners();
+
+    final isAuthorized = await _authService.verifyPin(securityPin);
+    if (!isAuthorized) {
+      _status = PaymentStatus.authFailed;
+      notifyListeners();
+      throw SecurityException("Invalid UPI PIN");
+    }
+
+    _status = PaymentStatus.processing;
+    notifyListeners();
+
+    final receipt = await _paymentService.dispatchTransfer(upiId, amount);
+    _walletBalance -= amount;
+    _status = PaymentStatus.completed;
+    notifyListeners();
+    return receipt;
+  }
+}`
+    },
     farmtech: {
       title: 'FarmTech Guru — Mobile Agricultural Advisory Engine',
       desc: 'Agronomic calculation engine computing fertilizer requirements from land geometry, crop phenology, and localized microclimate data with offline Firestore caching.',
@@ -214,63 +216,11 @@ public class FertilizerEngine {
         return new FertilizerPlan(totalUreaKg, totalDapKg, crop.getStage());
     }
 }`
-    },
-    invoice: {
-      title: 'D-Invoice — Standalone Client-Side GST Billing Engine',
-      desc: 'Zero-dependency financial billing engine executing itemized GST subtotals, tax splits (CGST + SGST), discounts, and vector print formatting without server calls.',
-      metrics: [
-        { label: 'Calculation Time', value: '< 1 ms' },
-        { label: 'Tax Accuracy', value: 'CGST + SGST Exact' },
-        { label: 'Dependencies', value: 'Zero (Vanilla JS)' },
-        { label: 'Print Output', value: 'Vector PDF / Thermal' }
-      ],
-      code: `function computeInvoiceTotals(items, gstRate = 0.18) {
-  const subtotal = items.reduce((acc, it) => acc + (it.qty * it.rate), 0);
-  const cgst = subtotal * (gstRate / 2);
-  const sgst = subtotal * (gstRate / 2);
-  const grandTotal = subtotal + cgst + sgst;
-
-  return {
-    subtotal: subtotal.toFixed(2),
-    cgst: cgst.toFixed(2),
-    sgst: sgst.toFixed(2),
-    grandTotal: grandTotal.toFixed(2)
-  };
-}`
     }
   };
 
+  // Exactly 5 approved projects
   const projects = [
-    {
-      id: 'cadencex',
-      title: 'CadenceX — Enterprise Cadence Reporting & Spatial Data Engine',
-      category: ['data', 'desktop'],
-      tags: ['Python', 'Polars', 'CustomTkinter', 'Spatial Data QA', 'XlsxWriter'],
-      badge: 'Spatial Data Engine',
-      image: cadencexImg,
-      desc: 'Enterprise spatial reporting suite engineered to ingest, filter, and reconcile 1,053,805 records across 8 database partitions in approximately 74 seconds with peak memory under 2.8 GB.',
-      specs: [
-        { label: 'Problem', val: 'Manual Excel workflows crashed on datasets exceeding 1M rows and lacked verifiable extraction audit parity.' },
-        { label: 'Architecture', val: 'Vectorized Polars (Rust/C Arrow engine) with asynchronous CustomTkinter desktop interface.' },
-        { label: 'Outcome', val: 'Verified zero parity drift: Extracted (1,053,805) = Eligible (894,120) + Excluded (142,390) + Held (17,295).' }
-      ],
-      github: 'https://github.com/venoumsk'
-    },
-    {
-      id: 'sorty',
-      title: 'Sorty — GPU-Accelerated Spatial & Automotive Partitioning Tool',
-      category: ['data', 'desktop'],
-      tags: ['Python', 'Polars', 'CUDA / CuPy', 'GPU Acceleration', 'Spatial Partitioning'],
-      badge: 'GPU Acceleration & Spatial QA',
-      image: sortyImg,
-      desc: 'High-performance desktop sorting and partitioning engine for large-scale automotive and spatial engineering datasets, powered by Polars and NVIDIA CUDA/CuPy on an RTX 3050 GPU.',
-      specs: [
-        { label: 'Problem', val: 'High-resolution geographic datasets freeze conventional processors and lose floating-point decimal precision.' },
-        { label: 'Architecture', val: 'Dynamic Level-15 quadkey derivation, GPU bounding-box kernels, and automated column mapping rules.' },
-        { label: 'Outcome', val: 'Lossless FP64 7-decimal coordinate fidelity sorted at 82,400 rows/second with zero truncation.' }
-      ],
-      github: 'https://github.com/venoumsk'
-    },
     {
       id: 'yolo11',
       title: 'YOLO11 Autonomous Driving 3-Model Perception Suite',
@@ -297,7 +247,7 @@ public class FertilizerEngine {
       specs: [
         { label: 'Problem', val: 'Enterprise operational dump files exceed Microsoft Excel 1,048,576 row hard ceilings and trigger memory exhaustion.' },
         { label: 'Architecture', val: 'Chunked iterator streams (100k rows/chunk) with automated date standardization and schema validation.' },
-        { label: 'Outcome', val: 'Processed 2.84M+ records with memory strictly bounded under 480 MB and 100% lossless output.' }
+        { label: 'Outcome', val: 'Processed 2.84M+ records with memory strictly bounded under 480 MB and 100% data fidelity.' }
       ],
       github: 'https://github.com/venoumsk/data-automation-demo'
     },
@@ -345,27 +295,12 @@ public class FertilizerEngine {
         { label: 'Outcome', val: 'Accurate agrochemical dosage plans, localized microclimate alerts, and seamless rural offline operation.' }
       ],
       github: 'https://github.com/venoumsk/FarmTech_Guru'
-    },
-    {
-      id: 'dinvoice',
-      title: 'D-Invoice — GST-Ready Web Invoicing Engine',
-      category: ['web'],
-      tags: ['JavaScript', 'HTML5', 'CSS3', 'PDF Engine', 'Financial Logic'],
-      badge: 'Web Application',
-      image: dinvoiceImg,
-      desc: 'Zero-overhead invoice generation engine built for merchants and small businesses. Computes multi-item inventory totals, tax splits (CGST + SGST), discounts, and generates print-ready vector PDFs without server dependencies.',
-      specs: [
-        { label: 'Problem', val: 'Traditional invoicing software requires recurring subscriptions, database setup, and internet access.' },
-        { label: 'Architecture', val: 'Pure vanilla JavaScript financial calculations with embedded print stylesheets and thermal receipt mode.' },
-        { label: 'Outcome', val: 'Sub-millisecond calculation latency, zero external API dependencies, and instant client-side PDF export.' }
-      ],
-      github: 'https://github.com/venoumsk/D-invoice'
     }
   ];
 
   const filteredProjects = activeFilter === 'all'
     ? projects
-    : projects.filter(p => p.category.includes(activeFilter));
+    : projects.filter((p) => p.category.includes(activeFilter));
 
   const currentWorkbench = workbenchDemos[activeWorkbenchTab];
 
@@ -380,10 +315,40 @@ public class FertilizerEngine {
           </a>
 
           <ul className="nav-links">
-            <li><a href="#workbench" className="nav-link">Workbench</a></li>
-            <li><a href="#work" className="nav-link">Projects</a></li>
-            <li><a href="#credentials" className="nav-link">Credentials</a></li>
-            <li><a href="https://github.com/venoumsk" target="_blank" rel="noopener noreferrer" className="nav-link">GitHub ↗</a></li>
+            <li>
+              <a 
+                href="#workbench" 
+                className={`nav-link ${activeSection === 'workbench' ? 'active' : ''}`}
+              >
+                Workbench
+              </a>
+            </li>
+            <li>
+              <a 
+                href="#work" 
+                className={`nav-link ${activeSection === 'work' ? 'active' : ''}`}
+              >
+                Projects
+              </a>
+            </li>
+            <li>
+              <a 
+                href="#credentials" 
+                className={`nav-link ${activeSection === 'credentials' ? 'active' : ''}`}
+              >
+                Credentials
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://github.com/venoumsk" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="nav-link"
+              >
+                GitHub ↗
+              </a>
+            </li>
           </ul>
 
           <div className="nav-actions">
@@ -413,30 +378,75 @@ public class FertilizerEngine {
             </button>
             <div className="badge badge-status">
               <span className="badge-status-dot"></span>
-              <span>Full-Stack &amp; Spatial Systems</span>
+              <span>Available for Systems &amp; Vision</span>
             </div>
             <button onClick={() => handleOpenModal()} className="btn btn-primary">
               Contact
             </button>
+            <button 
+              className={`mobile-nav-toggle ${mobileMenuOpen ? 'active' : ''}`}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle Mobile Navigation"
+            >
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="mobile-drawer">
+            <a 
+              href="#workbench" 
+              className="nav-link" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Workbench
+            </a>
+            <a 
+              href="#work" 
+              className="nav-link" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Projects
+            </a>
+            <a 
+              href="#credentials" 
+              className="nav-link" 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Credentials
+            </a>
+            <a 
+              href="https://github.com/venoumsk" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="nav-link"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              GitHub Profile ↗
+            </a>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
-      <header className="hero-section section">
+      <header className="hero-section section" id="hero">
         <div className="container">
           <div className="hero-badge-wrap">
             <span className="badge">
-              Software Developer · Spatial Data Systems, Computer Vision &amp; High-Throughput Pipelines
+              Software Developer · Computer Vision, High-Throughput Pipelines &amp; Mobile Systems
             </span>
           </div>
 
           <h1 className="hero-title">
-            Engineering high-throughput data engines, offline computer vision &amp; full-stack systems.
+            Engineering high-throughput data systems, computer vision &amp; modern applications.
           </h1>
 
           <p className="hero-subtitle">
-            Software developer building resilient backend data pipelines (1M+ records on Polars), offline perception suites (YOLO11 PyTorch), and client-side web applications with zero external server dependencies.
+            Software developer building offline perception suites (YOLO11 PyTorch), high-throughput stream pipelines (2.8M+ records), and reactive client-side applications with zero external server dependencies.
           </p>
 
           <div className="hero-ctas">
@@ -453,31 +463,38 @@ public class FertilizerEngine {
 
           <div className="hero-stats-grid">
             <div className="stat-card">
-              <div className="stat-value">1.05M Records in ~74s</div>
-              <div className="stat-label">CadenceX Spatial Engine</div>
-              <div className="stat-desc">Rust/Polars SIMD Arrow engine with zero mathematical parity drift across 8 enterprise partitions.</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-value">3 Perception Models</div>
+              <div className="stat-value">3 Neural Models</div>
               <div className="stat-label">YOLO11 Autonomous Suite</div>
-              <div className="stat-desc">Offline real-time inference on 1,000+ labeled road frames for lanes, construction hazards, and signals.</div>
+              <div className="stat-desc">Real-time offline inference across road lanes, construction hazards, and traffic signals.</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">2.8M+ Records Processed</div>
-              <div className="stat-label">DataFlow Stream ETL</div>
+              <div className="stat-value">2.8M+ Records</div>
+              <div className="stat-label">DataFlow Stream Pipeline</div>
               <div className="stat-desc">High-throughput chunked stream ingestion overcoming Microsoft Excel's 1.048M row ceiling.</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">Dynamic L15 Quadkeys</div>
-              <div className="stat-label">GPU Spatial QA (Sorty)</div>
-              <div className="stat-desc">Hardware-accelerated coordinate sorting (CUDA/CuPy) with lossless 7-decimal float precision.</div>
+              <div className="stat-value">&lt; 120ms Vector Latency</div>
+              <div className="stat-label">PaperForge Document Studio</div>
+              <div className="stat-desc">In-browser Canvas PDF manipulation with zero network transmissions and standard PDF/A export.</div>
             </div>
+            <div className="stat-card">
+              <div className="stat-value">Clean Architecture</div>
+              <div className="stat-label">CelerPay &amp; Mobile Systems</div>
+              <div className="stat-desc">Modular clean architecture with Provider state management and offline-first data caching.</div>
+            </div>
+          </div>
+
+          <div className="scroll-indicator-wrap">
+            <a href="#workbench" className="scroll-indicator-pill">
+              <span className="scroll-indicator-dot"></span>
+              <span>SCROLL TO EXPLORE WORKBENCH</span>
+            </a>
           </div>
         </div>
       </header>
 
       {/* Interactive Technical Workbench */}
-      <section id="workbench" className="section">
+      <section id="workbench" className="section reveal-on-scroll reveal-init">
         <div className="container">
           <div className="section-header">
             <span className="section-label">Engineered Capabilities</span>
@@ -489,18 +506,6 @@ public class FertilizerEngine {
 
           <div className="workbench-card">
             <div className="workbench-tabs">
-              <button 
-                className={`workbench-tab-btn ${activeWorkbenchTab === 'cadencex' ? 'active' : ''}`}
-                onClick={() => setActiveWorkbenchTab('cadencex')}
-              >
-                CadenceX Spatial Engine
-              </button>
-              <button 
-                className={`workbench-tab-btn ${activeWorkbenchTab === 'sorty' ? 'active' : ''}`}
-                onClick={() => setActiveWorkbenchTab('sorty')}
-              >
-                Sorty GPU Partitioning
-              </button>
               <button 
                 className={`workbench-tab-btn ${activeWorkbenchTab === 'yolo' ? 'active' : ''}`}
                 onClick={() => setActiveWorkbenchTab('yolo')}
@@ -520,16 +525,16 @@ public class FertilizerEngine {
                 PaperForge Vector PDF
               </button>
               <button 
+                className={`workbench-tab-btn ${activeWorkbenchTab === 'celerpay' ? 'active' : ''}`}
+                onClick={() => setActiveWorkbenchTab('celerpay')}
+              >
+                CelerPay UPI State Flow
+              </button>
+              <button 
                 className={`workbench-tab-btn ${activeWorkbenchTab === 'farmtech' ? 'active' : ''}`}
                 onClick={() => setActiveWorkbenchTab('farmtech')}
               >
                 FarmTech Mobile Engine
-              </button>
-              <button 
-                className={`workbench-tab-btn ${activeWorkbenchTab === 'invoice' ? 'active' : ''}`}
-                onClick={() => setActiveWorkbenchTab('invoice')}
-              >
-                D-Invoice GST Engine
               </button>
             </div>
 
@@ -571,7 +576,7 @@ public class FertilizerEngine {
                     <span className="code-window-dot dot-green"></span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <span>Python / Rust / TypeScript / Java</span>
+                    <span>Python / Dart / TypeScript / Java</span>
                     <button 
                       onClick={() => handleCopyCode(currentWorkbench.code)} 
                       className="code-copy-btn"
@@ -590,14 +595,14 @@ public class FertilizerEngine {
         </div>
       </section>
 
-      {/* Verified Projects Section */}
-      <section id="work" className="section">
+      {/* Verified Projects Showcase */}
+      <section id="work" className="section reveal-on-scroll reveal-init">
         <div className="container">
           <div className="section-header">
-            <span className="section-label">Verified Showcase</span>
+            <span className="section-label">Curated Showcase</span>
             <h2 className="section-title">Production Systems &amp; Engineering Projects</h2>
             <p className="section-subtitle">
-              High-throughput data engines, offline computer vision perception suites, and client-side web applications.
+              Offline computer vision perception suites, high-throughput stream pipelines, and client-side applications.
             </p>
           </div>
 
@@ -609,38 +614,32 @@ public class FertilizerEngine {
               All Projects ({projects.length})
             </button>
             <button 
-              className={`filter-btn ${activeFilter === 'data' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('data')}
-            >
-              Spatial &amp; Big Data ({projects.filter(p => p.category.includes('data')).length})
-            </button>
-            <button 
               className={`filter-btn ${activeFilter === 'ai' ? 'active' : ''}`}
               onClick={() => setActiveFilter('ai')}
             >
-              AI &amp; Vision ({projects.filter(p => p.category.includes('ai')).length})
+              AI &amp; Vision ({projects.filter((p) => p.category.includes('ai')).length})
             </button>
             <button 
-              className={`filter-btn ${activeFilter === 'desktop' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('desktop')}
+              className={`filter-btn ${activeFilter === 'data' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('data')}
             >
-              Desktop Systems ({projects.filter(p => p.category.includes('desktop')).length})
+              Data Engineering ({projects.filter((p) => p.category.includes('data')).length})
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'mobile' ? 'active' : ''}`}
               onClick={() => setActiveFilter('mobile')}
             >
-              Mobile Applications ({projects.filter(p => p.category.includes('mobile')).length})
+              Mobile Applications ({projects.filter((p) => p.category.includes('mobile')).length})
             </button>
             <button 
               className={`filter-btn ${activeFilter === 'web' ? 'active' : ''}`}
               onClick={() => setActiveFilter('web')}
             >
-              Web Architecture ({projects.filter(p => p.category.includes('web')).length})
+              Web Architecture ({projects.filter((p) => p.category.includes('web')).length})
             </button>
           </div>
 
-          <div className="projects-grid">
+          <div className="projects-grid" key={activeFilter}>
             {filteredProjects.map((p) => (
               <div key={p.id} className="project-card">
                 <div>
@@ -657,7 +656,7 @@ public class FertilizerEngine {
                   </div>
 
                   <div className="project-tags">
-                    {p.tags.map(t => (
+                    {p.tags.map((t) => (
                       <span key={t} className="project-tag">{t}</span>
                     ))}
                   </div>
@@ -700,7 +699,7 @@ public class FertilizerEngine {
       </section>
 
       {/* Verified Credentials & Education */}
-      <section id="credentials" className="section">
+      <section id="credentials" className="section reveal-on-scroll reveal-init">
         <div className="container">
           <div className="section-header">
             <span className="section-label">Academic &amp; Professional Background</span>
@@ -749,7 +748,7 @@ public class FertilizerEngine {
         </div>
       </section>
 
-      {/* Modal */}
+      {/* Contact Modal */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -759,7 +758,7 @@ public class FertilizerEngine {
               Get in Touch
             </h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginBottom: '1.35rem', lineHeight: 1.5 }}>
-              {modalSubject ? `Inquiring regarding: ${modalSubject}` : 'Open to technical discussions, spatial data engineering, and software development collaboration.'}
+              {modalSubject ? `Inquiring regarding: ${modalSubject}` : 'Open to technical discussions, computer vision pipelines, and software development collaboration.'}
             </p>
 
             <div style={{ background: 'var(--bg-card-alt)', padding: '1.1rem', borderRadius: '10px', border: '1px solid var(--border-hairline)', marginBottom: '1.35rem' }}>
@@ -834,8 +833,8 @@ public class FertilizerEngine {
             <a href="https://github.com/venoumsk" target="_blank" rel="noopener noreferrer" className="nav-link">GitHub</a>
             <a href="https://github.com/venoumsk/FarmTech_Guru" target="_blank" rel="noopener noreferrer" className="nav-link">FarmTech Guru</a>
             <a href="https://github.com/venoumsk/paperforge" target="_blank" rel="noopener noreferrer" className="nav-link">PaperForge</a>
-            <a href="https://github.com/venoumsk/D-invoice" target="_blank" rel="noopener noreferrer" className="nav-link">D-Invoice</a>
             <a href="https://github.com/venoumsk/data-automation-demo" target="_blank" rel="noopener noreferrer" className="nav-link">Data Pipeline</a>
+            <a href="https://github.com/venoumsk/celerpay" target="_blank" rel="noopener noreferrer" className="nav-link">CelerPay</a>
           </div>
         </div>
       </footer>
