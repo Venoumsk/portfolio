@@ -265,6 +265,21 @@ export async function annotateDocument(pdfBytes: Uint8Array, annotations: any[])
       github: 'https://github.com/venoumsk'
     },
     {
+      id: 'sorty',
+      title: 'Sorty — GPU-Accelerated Spatial & Automotive Partitioning Tool',
+      category: ['python', 'apps'],
+      tags: ['Python', 'Polars', 'CUDA / CuPy', 'GPU Acceleration', 'Spatial Partitioning'],
+      image: dataflowImg,
+      badge: 'GPU Acceleration & Spatial QA',
+      desc: 'High-performance desktop sorting and partitioning engine for large-scale automotive and spatial engineering datasets. Leverages Polars and NVIDIA GPU acceleration (CuPy / GeForce RTX 3050) for dynamic L15 partition derivation, custom column mapping, and native Excel number formatting with zero coordinate precision loss.',
+      highlights: [
+        'Hardware acceleration via NVIDIA CUDA / CuPy and Polars SIMD',
+        'Dynamic L15 spatial partition extraction and automated column rules',
+        'Preserves high-precision decimal coordinates without truncation'
+      ],
+      github: 'https://github.com/venoumsk'
+    },
+    {
       id: 'celerpay',
       title: 'CelerPay — UPI Mobile Payment Application',
       category: ['apps'],
