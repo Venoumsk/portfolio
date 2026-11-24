@@ -1,0 +1,5 @@
+# robots.txt for https://venoumsk.github.io/portfolio/
+User-agent: *
+Allow: /
+
+Sitemap: https://venoumsk.github.io/portfolio/sitemap.xml
