@@ -9,7 +9,18 @@ import celerpayImg from './assets/celerpay.jpg';
 import farmtechImg from './assets/farmtech_guru.jpg';
 
 export default function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const queryTheme = params.get('theme');
+      if (queryTheme === 'light' || queryTheme === 'dark') return queryTheme;
+      const saved = localStorage.getItem('portfolio_theme');
+      if (saved) return saved;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch (e) {
+      return 'light';
+    }
+  });
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeWorkbenchTab, setActiveWorkbenchTab] = useState('yolo');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,9 +30,12 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
-  // Theme synchronization
+  // Theme synchronization and persistence
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('portfolio_theme', theme);
+    } catch (e) {}
   }, [theme]);
 
   // Scroll reveal and active section tracking via IntersectionObserver
